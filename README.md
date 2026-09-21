@@ -112,3 +112,7 @@ plainly if something is missing rather than failing silently.
 - You need the Enchanting profession. Obviously.
 - If a confirmation box appears when destroying an item, you have to accept it
   yourself. That one is not something an addon is allowed to touch either.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
