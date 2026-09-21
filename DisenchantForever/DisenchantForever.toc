@@ -1,0 +1,20 @@
+## Interface: 16001
+## Title: |cffa335eeDisenchant Forever|r
+## Version: 1.40
+## SavedVariablesPerCharacter: DisenchantForeverDB
+## IconTexture: Interface\Icons\INV_Enchant_Disenchant
+
+## Notes: A button that always points at the next disenchantable item in your bags: one click per item, with no searching and no aiming.
+## Notes-esES: Un botón que siempre apunta al siguiente objeto desencantable de tus bolsas: un clic por objeto, sin buscar ni apuntar.
+## Notes-esMX: Un botón que siempre apunta al siguiente objeto desencantable de tus bolsas: un clic por objeto, sin buscar ni apuntar.
+## Notes-deDE: Eine Schaltfläche, die immer auf den nächsten entzauberbaren Gegenstand in deinen Taschen zeigt: ein Klick pro Gegenstand, ohne Suchen und ohne Zielen.
+## Notes-frFR: Un bouton qui vise toujours le prochain objet désenchantable de vos sacs : un clic par objet, sans chercher ni viser.
+## Notes-itIT: Un pulsante che punta sempre al prossimo oggetto disincantabile nelle tue borse: un clic per oggetto, senza cercare né mirare.
+## Notes-ptBR: Um botão que sempre aponta para o próximo item desencantável nas suas bolsas: um clique por item, sem procurar nem mirar.
+## Notes-ruRU: Кнопка, которая всегда указывает на следующий предмет в сумках, пригодный для распыления: один щелчок на предмет, без поиска и наведения.
+## Notes-koKR: 가방에서 마력 추출이 가능한 다음 아이템을 항상 가리키는 버튼입니다. 아이템마다 클릭 한 번이면 되며, 찾거나 조준할 필요가 없습니다.
+## Notes-zhCN: 一个始终指向背包中下一件可分解物品的按钮：每件物品只需点击一次，无需翻找，也无需瞄准。
+## Notes-zhTW: 一個永遠指向背包中下一件可分解物品的按鈕：每件物品只要點擊一次，不必翻找，也不必瞄準。
+
+Locales.lua
+DisenchantForever.lua

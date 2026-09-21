@@ -1,0 +1,81 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Disenchant Forever">
+  <title>Disenchant Forever</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a1f42"/>
+      <stop offset="1" stop-color="#0d0914"/>
+    </linearGradient>
+
+    <radialGradient id="glow" cx="46%" cy="44%" r="55%">
+      <stop offset="0" stop-color="#a335ee" stop-opacity="0.50"/>
+      <stop offset="0.6" stop-color="#7b2cbf" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#7b2cbf" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="facetLeft" x1="0" y1="0" x2="1" y2="0.3">
+      <stop offset="0" stop-color="#5b21a6"/>
+      <stop offset="1" stop-color="#8b4cd8"/>
+    </linearGradient>
+
+    <linearGradient id="facetRight" x1="0" y1="0" x2="1" y2="0.4">
+      <stop offset="0" stop-color="#c99cff"/>
+      <stop offset="1" stop-color="#7b2cbf"/>
+    </linearGradient>
+
+    <linearGradient id="facetTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#efe0ff"/>
+      <stop offset="1" stop-color="#b57bee"/>
+    </linearGradient>
+
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a335ee" stop-opacity="0.9"/>
+      <stop offset="0.5" stop-color="#5b21a6" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#a335ee" stop-opacity="0.75"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Fondo -->
+  <rect x="8" y="8" width="496" height="496" rx="104" fill="url(#bg)"/>
+  <rect x="8" y="8" width="496" height="496" rx="104" fill="url(#glow)"/>
+  <rect x="14" y="14" width="484" height="484" rx="98" fill="none" stroke="url(#rim)" stroke-width="5"/>
+
+  <!-- Cristal: el objeto deshaciendose en polvo -->
+  <g transform="translate(-14 4)">
+    <!-- cara izquierda -->
+    <path d="M256 92 L200 178 L212 330 L256 386 Z" fill="url(#facetLeft)"/>
+    <!-- cara derecha -->
+    <path d="M256 92 L312 178 L300 330 L256 386 Z" fill="url(#facetRight)"/>
+    <!-- chaflan superior -->
+    <path d="M256 92 L200 178 L256 196 L312 178 Z" fill="url(#facetTop)"/>
+    <!-- arista central -->
+    <path d="M256 196 L256 386" stroke="#f3e8ff" stroke-width="3" stroke-opacity="0.45"/>
+    <!-- brillo -->
+    <path d="M268 210 L292 188 L286 300 L268 330 Z" fill="#ffffff" fill-opacity="0.16"/>
+    <!-- contorno -->
+    <path d="M256 92 L312 178 L300 330 L256 386 L212 330 L200 178 Z"
+          fill="none" stroke="#e9d5ff" stroke-opacity="0.55" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+
+  <!-- El borde derecho se desprende en fragmentos -->
+  <g fill="#c99cff">
+    <rect x="312" y="300" width="26" height="26" rx="5" transform="rotate(18 325 313)" fill-opacity="0.92"/>
+    <rect x="344" y="256" width="21" height="21" rx="4" transform="rotate(-14 354 266)" fill-opacity="0.78"/>
+    <rect x="336" y="200" width="17" height="17" rx="4" transform="rotate(26 344 208)" fill-opacity="0.60"/>
+    <rect x="370" y="176" width="13" height="13" rx="3" transform="rotate(-8 376 182)" fill-opacity="0.44"/>
+    <rect x="356" y="132" width="10" height="10" rx="3" transform="rotate(32 361 137)" fill-opacity="0.30"/>
+    <rect x="392" y="116" width="8" height="8" rx="2" transform="rotate(12 396 120)" fill-opacity="0.20"/>
+  </g>
+
+  <!-- Destellos -->
+  <g fill="#f3e8ff">
+    <path d="M132 150 L140 176 L166 184 L140 192 L132 218 L124 192 L98 184 L124 176 Z" fill-opacity="0.85"/>
+    <path d="M388 336 L394 356 L414 362 L394 368 L388 388 L382 368 L362 362 L382 356 Z" fill-opacity="0.65"/>
+    <path d="M118 322 L123 337 L138 342 L123 347 L118 362 L113 347 L98 342 L113 337 Z" fill-opacity="0.45"/>
+  </g>
+
+  <!-- Polvo al pie -->
+  <g fill="#a335ee">
+    <ellipse cx="242" cy="404" rx="96" ry="13" fill-opacity="0.35"/>
+    <ellipse cx="242" cy="404" rx="52" ry="7" fill-opacity="0.45"/>
+  </g>
+</svg>
