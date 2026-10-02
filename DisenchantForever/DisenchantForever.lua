@@ -234,7 +234,8 @@ end
 -- Marcos y texturas a pelo. Una plantilla de Blizzard que no exista tumba
 -- el addon entero al cargar, asi que mejor no depender de ninguna.
 
-local ROW_HEIGHT, MAX_ROWS = 20, 8
+local ROW_HEIGHT, MAX_ROWS = 20, 5
+local listOffset = 0
 
 -- recuadro con borde
 local function Panel(parent, r, g, b, a)
@@ -383,6 +384,16 @@ local function BuildOptions()
     more:SetPoint("BOTTOMLEFT", 24, 50)
     more:SetTextColor(0.6, 0.58, 0.65)
 
+    -- rueda para recorrer la lista
+    local wheel = CreateFrame("Frame", nil, options)
+    wheel:SetPoint("TOPLEFT", listEdge, "TOPLEFT")
+    wheel:SetPoint("BOTTOMRIGHT", listEdge, "BOTTOMRIGHT")
+    wheel:EnableMouseWheel(true)
+    wheel:SetScript("OnMouseWheel", function(_, delta)
+        listOffset = listOffset - delta
+        RefreshOptions()
+    end)
+
     -- filas reutilizadas
     options.rows = {}
     for i = 1, MAX_ROWS do
@@ -433,8 +444,11 @@ function RefreshOptions()
     end
     table.sort(banned, function(a, b) return a.id < b.id end)
 
+    local maxOffset = math.max(0, #banned - MAX_ROWS)
+    listOffset = math.min(math.max(listOffset, 0), maxOffset)
+
     for i, row in ipairs(options.rows) do
-        local entry = banned[i]
+        local entry = banned[i + listOffset]
         if entry then
             row.text:SetText(entry.link)
             row.remove:SetScript("OnClick", function()
@@ -448,8 +462,9 @@ function RefreshOptions()
     end
 
     options.empty:SetText(#banned == 0 and L["Nothing banned yet."] or "")
-    options.more:SetText(#banned > MAX_ROWS
-        and string.format(L["and %d more"], #banned - MAX_ROWS) or "")
+    local below = #banned - MAX_ROWS - listOffset
+    options.more:SetText(below > 0
+        and string.format(L["and %d more"], below) or "")
 end
 
 local function ToggleOptions()

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.41
+
+- Fixed the ban list spilling out of its box when it held more than a few items.
+  It now shows five at a time; scroll with the mouse wheel to see the rest.
+
 ## 1.40 — First release
 
 A button that always points at the next disenchantable item in your bags.
