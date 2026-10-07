@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.42
+
+- New look shared with the other Forever addons: the options window is dark glass with bronze lines, buttons have relief and a gold edge under the mouse, and ticks are gold.
+- The disenchant button has a bronze frame and glows gold under the mouse.
+- Arrows next to the ban list to scroll it up and down. The mouse wheel still works.
+
 ## 1.41
 
 - Fixed the ban list spilling out of its box when it held more than a few items.

@@ -1,6 +1,6 @@
 ## Interface: 16001
 ## Title: |cffa335eeDisenchant Forever|r
-## Version: 1.41
+## Version: 1.42
 ## SavedVariablesPerCharacter: DisenchantForeverDB
 ## IconTexture: Interface\Icons\INV_Enchant_Disenchant
 
