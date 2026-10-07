@@ -17,4 +17,5 @@
 ## Notes-zhTW: 一個永遠指向背包中下一件可分解物品的按鈕：每件物品只要點擊一次，不必翻找，也不必瞄準。
 
 Locales.lua
+Style.lua
 DisenchantForever.lua

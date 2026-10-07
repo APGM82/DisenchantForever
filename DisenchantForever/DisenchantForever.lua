@@ -36,6 +36,8 @@ for key, value in pairs(ns.L[(GetLocale and GetLocale()) or "enUS"] or {}) do
     L[key] = value
 end
 
+local S = ns.style
+
 -- traducir antes de formatear, que el orden cambia segun el idioma
 local function Say(text, ...)
     local message = L[text]
@@ -237,23 +239,9 @@ end
 local ROW_HEIGHT, MAX_ROWS = 20, 5
 local listOffset = 0
 
--- recuadro con borde
-local function Panel(parent, r, g, b, a)
-    local edge = parent:CreateTexture(nil, "BACKGROUND")
-    edge:SetColorTexture(0.42, 0.32, 0.58, 0.9)
-    local face = parent:CreateTexture(nil, "BORDER")
-    face:SetColorTexture(r, g, b, a)
-    face:SetPoint("TOPLEFT", edge, "TOPLEFT", 1, -1)
-    face:SetPoint("BOTTOMRIGHT", edge, "BOTTOMRIGHT", -1, 1)
-    return edge, face
-end
-
 local function MakeCheck(parent, labelKey, getter, setter)
     local check = CreateFrame("Button", nil, parent)
     check:SetSize(18, 18)
-
-    local edge, face = Panel(check, 0.10, 0.08, 0.14, 1)
-    edge:SetAllPoints(check)
 
     local mark = check:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     mark:SetPoint("CENTER", 0, 0)
@@ -261,18 +249,17 @@ local function MakeCheck(parent, labelKey, getter, setter)
     local label = check:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     label:SetPoint("LEFT", check, "RIGHT", 6, 0)
     label:SetText(L[labelKey])
-    label:SetTextColor(0.9, 0.88, 0.95)
+    label:SetTextColor(unpack(S.colors.text))
 
     check:SetScript("OnClick", function()
         setter(not getter())
         Refresh()
         RefreshOptions()
     end)
-    check:SetScript("OnEnter", function() face:SetColorTexture(0.20, 0.16, 0.28, 1) end)
-    check:SetScript("OnLeave", function() face:SetColorTexture(0.10, 0.08, 0.14, 1) end)
+    S.Check(check)
 
     check.Update = function()
-        mark:SetText(getter() and "|cff66dd66x|r" or "")
+        mark:SetText(getter() and S.TICK or "")
     end
     return check
 end
@@ -281,17 +268,13 @@ local function MakeButton(parent, width, labelKey, onClick)
     local btn = CreateFrame("Button", nil, parent)
     btn:SetSize(width, 22)
 
-    local edge, face = Panel(btn, 0.24, 0.18, 0.34, 1)
-    edge:SetAllPoints(btn)
-
     local label = btn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     label:SetPoint("CENTER")
     label:SetText(L[labelKey])
 
-    btn:SetScript("OnEnter", function() face:SetColorTexture(0.34, 0.26, 0.48, 1) end)
-    btn:SetScript("OnLeave", function() face:SetColorTexture(0.24, 0.18, 0.34, 1) end)
+    label:SetTextColor(unpack(S.colors.text))
     btn:SetScript("OnClick", onClick)
-    return btn
+    return S.Button(btn)
 end
 
 local function BuildOptions()
@@ -306,17 +289,7 @@ local function BuildOptions()
     options:SetScript("OnDragStart", options.StartMoving)
     options:SetScript("OnDragStop", options.StopMovingOrSizing)
 
-    local edge = options:CreateTexture(nil, "BACKGROUND")
-    edge:SetAllPoints()
-    edge:SetColorTexture(0.42, 0.32, 0.58, 1)
-    local face = options:CreateTexture(nil, "BORDER")
-    face:SetPoint("TOPLEFT", 2, -2)
-    face:SetPoint("BOTTOMRIGHT", -2, 2)
-    face:SetColorTexture(0.06, 0.05, 0.09, 0.96)
-
-    local title = options:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    title:SetPoint("TOP", 0, -12)
-    title:SetText("|cffa335eeDisenchant Forever|r")
+    S.Window(options, "Disenchant Forever", -36)
 
     local close = MakeButton(options, 22, "x", function() options:Hide() end)
     close:SetPoint("TOPRIGHT", -8, -8)
@@ -360,29 +333,26 @@ local function BuildOptions()
     -- estado
     local status = options:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     status:SetPoint("TOPLEFT", 16, -186)
-    status:SetTextColor(0.75, 0.72, 0.82)
+    status:SetTextColor(unpack(S.colors.dim))
 
     -- lista de vetados
-    local listTitle = options:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    local listTitle = S.Header(options:CreateFontString(nil, "OVERLAY", "GameFontNormal"), 16)
     listTitle:SetPoint("TOPLEFT", 16, -208)
     listTitle:SetText(L["Banned items"])
 
     local listEdge = options:CreateTexture(nil, "BACKGROUND")
     listEdge:SetPoint("TOPLEFT", 14, -228)
     listEdge:SetPoint("BOTTOMRIGHT", -14, 44)
-    listEdge:SetColorTexture(0.42, 0.32, 0.58, 0.6)
-    local listFace = options:CreateTexture(nil, "BORDER")
-    listFace:SetPoint("TOPLEFT", listEdge, "TOPLEFT", 1, -1)
-    listFace:SetPoint("BOTTOMRIGHT", listEdge, "BOTTOMRIGHT", -1, 1)
-    listFace:SetColorTexture(0.03, 0.02, 0.05, 0.9)
+    listEdge:SetColorTexture(0, 0, 0, 0)
+    S.Inset(options, listEdge)
 
     local empty = options:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     empty:SetPoint("TOPLEFT", 24, -238)
-    empty:SetTextColor(0.6, 0.58, 0.65)
+    empty:SetTextColor(unpack(S.colors.dim))
 
     local more = options:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     more:SetPoint("BOTTOMLEFT", 24, 50)
-    more:SetTextColor(0.6, 0.58, 0.65)
+    more:SetTextColor(unpack(S.colors.dim))
 
     -- rueda para recorrer la lista
     local wheel = CreateFrame("Frame", nil, options)
@@ -498,13 +468,9 @@ local function Build()
         db.point, db.relPoint, db.x, db.y = point, relPoint, x, y
     end)
 
-    local border = button:CreateTexture(nil, "BACKGROUND")
-    border:SetColorTexture(0, 0, 0, 0.8)
-    border:SetPoint("TOPLEFT", -2, 2)
-    border:SetPoint("BOTTOMRIGHT", 2, -2)
-
     icon = button:CreateTexture(nil, "ARTWORK")
     icon:SetAllPoints()
+    icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 
     countText = button:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
     countText:SetPoint("BOTTOMRIGHT", -2, 2)
@@ -524,16 +490,13 @@ local function Build()
         GameTooltip:Show()
     end)
     button:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    S.IconFrame(button)
 
     -- boton normal, no seguro, para que el clic no se mezcle
     banButton = CreateFrame("Button", nil, button)
     banButton:SetSize(16, 16)
     banButton:SetPoint("TOPRIGHT", button, "TOPRIGHT", 6, 6)
     banButton:SetFrameLevel(button:GetFrameLevel() + 2)
-
-    local banBack = banButton:CreateTexture(nil, "BACKGROUND")
-    banBack:SetAllPoints()
-    banBack:SetColorTexture(0, 0, 0, 0.8)
 
     local banMark = banButton:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     banMark:SetPoint("CENTER", 0, 0)
@@ -549,16 +512,13 @@ local function Build()
         GameTooltip:Show()
     end)
     banButton:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    S.Corner(banButton)
 
     -- engranaje, arriba a la izquierda; abajo se pisaba con el nombre
     optionsButton = CreateFrame("Button", nil, button)
     optionsButton:SetSize(18, 18)
     optionsButton:SetPoint("TOPLEFT", button, "TOPLEFT", -6, 6)
     optionsButton:SetFrameLevel(button:GetFrameLevel() + 2)
-
-    local gearBack = optionsButton:CreateTexture(nil, "BACKGROUND")
-    gearBack:SetAllPoints()
-    gearBack:SetColorTexture(0, 0, 0, 0.85)
 
     -- si la textura faltara queda el cuadro, que se sigue pulsando
     local gear = optionsButton:CreateTexture(nil, "ARTWORK")
@@ -574,6 +534,7 @@ local function Build()
         GameTooltip:Show()
     end)
     optionsButton:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    S.Corner(optionsButton)
 end
 
 local function ApplyPosition()
