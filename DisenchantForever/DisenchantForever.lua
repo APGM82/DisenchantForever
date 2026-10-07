@@ -364,6 +364,33 @@ local function BuildOptions()
         RefreshOptions()
     end)
 
+    -- flechas para subir y bajar la lista
+    local function Arrow(down)
+        local btn = CreateFrame("Button", nil, options)
+        btn:SetSize(18, 18)
+        btn:SetFrameLevel(wheel:GetFrameLevel() + 2)
+        local arrow = btn:CreateTexture(nil, "ARTWORK")
+        arrow:SetTexture("Interface\\AddOns\\DisenchantForever\\Media\\arrow.tga")
+        arrow:SetPoint("TOPLEFT", 2, -2)
+        arrow:SetPoint("BOTTOMRIGHT", -2, 2)
+        arrow:SetVertexColor(unpack(S.colors.gold))
+        if down then arrow:SetTexCoord(0, 1, 1, 0) end
+        btn:SetScript("OnClick", function()
+            listOffset = listOffset + (down and 1 or -1)
+            RefreshOptions()
+        end)
+        S.Corner(btn)
+        btn.SetActive = function(self, on)
+            self:SetEnabled(on)
+            self:SetAlpha(on and 1 or 0.35)
+        end
+        return btn
+    end
+    options.up = Arrow(false)
+    options.up:SetPoint("TOPRIGHT", listEdge, "TOPRIGHT", -4, -4)
+    options.down = Arrow(true)
+    options.down:SetPoint("BOTTOMRIGHT", listEdge, "BOTTOMRIGHT", -4, 4)
+
     -- filas reutilizadas
     options.rows = {}
     for i = 1, MAX_ROWS do
@@ -433,6 +460,8 @@ function RefreshOptions()
 
     options.empty:SetText(#banned == 0 and L["Nothing banned yet."] or "")
     local below = #banned - MAX_ROWS - listOffset
+    options.up:SetActive(listOffset > 0)
+    options.down:SetActive(below > 0)
     options.more:SetText(below > 0
         and string.format(L["and %d more"], below) or "")
 end
