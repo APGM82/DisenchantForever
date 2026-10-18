@@ -56,8 +56,8 @@ your bags.
 
 Everything can be driven from a window: checkboxes for the button, the
 quality filters and the disenchanting materials, a live count of what is left,
-and the ban list with a cross on each row so you can let a single item back in. Open it with the small gear on
-the button, or with `/dis options`.
+and the ban list with a cross on each row so you can let a single item back in.
+Open it with the small gear on the button, or with `/dis options`.
 
 The window is built from plain frames and textures rather than Blizzard's
 widget templates, so a template that happens not to exist on a given client
@@ -129,9 +129,10 @@ to 15. Nobody has published what they give yet, so the tooltip marks that
 line as unconfirmed and does not price it.
 
 Items the client marks as impossible to disenchant (PvP rank rewards and
-enchanter-made wands, for example) show nothing, and the button skips them. The game does not expose
-that mark to addons, so the list ships with the addon and is regenerated from
-the client data after each patch with `herramientas/actualizar_datos.py`.
+enchanter-made wands, for example) show nothing, and the button skips them.
+The game does not expose that mark to addons, so the list ships with the addon
+and is regenerated from the client data after each patch with
+`herramientas/actualizar_datos.py`.
 
 ## Installation
 

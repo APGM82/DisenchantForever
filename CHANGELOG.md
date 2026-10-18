@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.43
+
+- Item tooltips show what disenchanting gives: each material with its chance and how many. The button's tooltip now names the item it is aimed at and shows the same.
+- With Auctionator installed, each material shows its auction price, and the tooltip adds up the average value of disenchanting and says whether it beats selling to a vendor or at the auction house.
+- New option to show or hide the materials, also with /dis tooltip.
+- The button skips items the game will not let you disenchant, such as enchanter-made wands. It used to get stuck on them until you banned them.
+
 ## 1.42
 
 - New look shared with the other Forever addons: the options window is dark glass with bronze lines, buttons have relief and a gold edge under the mouse, and ticks are gold.
