@@ -123,6 +123,9 @@ local function IsCandidate(link, quality)
     if not link or not quality then return false end
     if quality < QUALITY_UNCOMMON or quality > MaxQuality() then return false end
     if IsBanned(link) then return false end
+    -- lo que el juego no deja desencantar: el hechizo falla y el boton se quedaba parado ahi
+    local itemID = ItemIDOf(link)
+    if itemID and ns.noDisenchant[itemID] then return false end
     local classID = ClassOf(link)
     return classID == CLASS_WEAPON or classID == CLASS_ARMOR
 end

@@ -24,7 +24,8 @@ your bags.
 
 - **Auto-aim.** Always targeted at the next disenchantable item: weapons and
   armour of uncommon quality or better. Whites and greys are skipped, because
-  they cannot be disenchanted at all.
+  they cannot be disenchanted at all, and so are the few items the game will
+  not let you disenchant, such as enchanter-made wands.
 - **Counter.** Shows how many candidates are left, so you know when you are done.
 - **Ban list.** The red X banishes an item, and it never comes up again —
   neither that one nor any others of the same kind. Remembered between
@@ -128,7 +129,7 @@ to 15. Nobody has published what they give yet, so the tooltip marks that
 line as unconfirmed and does not price it.
 
 Items the client marks as impossible to disenchant (PvP rank rewards and
-enchanter-made wands, for example) show nothing. The game does not expose
+enchanter-made wands, for example) show nothing, and the button skips them. The game does not expose
 that mark to addons, so the list ships with the addon and is regenerated from
 the client data after each patch with `herramientas/actualizar_datos.py`.
 
