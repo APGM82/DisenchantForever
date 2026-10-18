@@ -1,5 +1,5 @@
 -- Armas y armaduras que el juego no deja desencantar (flag 0x8000 de ItemSparse).
--- Generado por herramientas/actualizar_datos.py con la build 1.60.1.70425: no tocar a mano.
+-- Generado por herramientas/actualizar_datos.py con la build 1.60.1.70450: no tocar a mano.
 
 local _, ns = ...
 
@@ -139,7 +139,8 @@ for _, itemID in ipairs({
     281691, 281692, 281693, 281694, 281695, 281696, 281697, 281698, 281699, 281700, 281701, 281702,
     281703, 281704, 281705, 281706, 281707, 281708, 281709, 281710, 281711, 281712, 281713, 281714,
     281715, 281716, 281717, 281718, 281719, 281720, 281721, 281722, 281723, 281724, 281725, 281727,
-    281728, 281729, 281730, 281731, 281732, 281733, 285352, 285353,
+    281728, 281729, 281730, 281731, 281732, 281733, 285352, 285353, 287620, 287621, 287622, 287623,
+    287624, 287625, 287626, 287627, 287628, 287648,
 }) do
     ns.noDisenchant[itemID] = true
 end
