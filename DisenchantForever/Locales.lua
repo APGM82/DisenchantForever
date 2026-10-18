@@ -63,6 +63,15 @@ ns.L.esES = {
     ["%d candidates in your bags"] = "%d candidatos en tus bolsas",
     ["Options"] = "Opciones",
 
+    ["Disenchant"] = "Desencantar",
+    ["unconfirmed"] = "sin confirmar",
+    ["Better to disenchant"] = "Mejor desencantar",
+    ["Better to sell to a vendor"] = "Mejor venderlo en la tienda",
+    ["Better to sell at the auction house"] = "Mejor venderlo en la subasta",
+    ["Show disenchanting materials"] = "Mostrar los materiales de desencantar",
+    ["materials in tooltips: on."] = "materiales al pasar el raton: activados.",
+    ["materials in tooltips: off."] = "materiales al pasar el raton: desactivados.",
+
     ["commands:"] = "comandos:",
     ["  |cffffd100/dis options|r - open the options window"] = "  |cffffd100/dis options|r - abre la ventana de opciones",
     ["  |cffffd100/dis|r - show or hide the button"] = "  |cffffd100/dis|r - muestra u oculta el boton",
@@ -70,6 +79,7 @@ ns.L.esES = {
     ["  |cffffd100/dis list|r - see the banned items"] = "  |cffffd100/dis list|r - ve los objetos vetados",
     ["  |cffffd100/dis clear|r - empty the banned list"] = "  |cffffd100/dis clear|r - vacia la lista de vetados",
     ["  |cffffd100/dis blues|r / |cffffd100epics|r - which qualities count"] = "  |cffffd100/dis blues|r / |cffffd100epics|r - que calidades entran",
+    ["  |cffffd100/dis tooltip|r - show or hide the disenchanting materials"] = "  |cffffd100/dis tooltip|r - muestra u oculta los materiales de desencantar",
     ["  |cffffd100/dis lock|r / |cffffd100reset|r - fix and reposition the button"] = "  |cffffd100/dis lock|r / |cffffd100reset|r - fijar y recolocar el boton",
     ["  |cffffd100/dis status|r - diagnosis"] = "  |cffffd100/dis status|r - diagnostico",
 }
@@ -133,6 +143,15 @@ ns.L.deDE = {
     ["%d candidates in your bags"] = "%d Kandidaten in deinen Taschen",
     ["Options"] = "Optionen",
 
+    ["Disenchant"] = "Entzaubern",
+    ["unconfirmed"] = "unbestaetigt",
+    ["Better to disenchant"] = "Besser entzaubern",
+    ["Better to sell to a vendor"] = "Besser beim Haendler verkaufen",
+    ["Better to sell at the auction house"] = "Besser im Auktionshaus verkaufen",
+    ["Show disenchanting materials"] = "Entzauberungsmaterialien anzeigen",
+    ["materials in tooltips: on."] = "Materialien im Tooltip: an.",
+    ["materials in tooltips: off."] = "Materialien im Tooltip: aus.",
+
     ["commands:"] = "Befehle:",
     ["  |cffffd100/dis options|r - open the options window"] = "  |cffffd100/dis options|r - oeffnet das Optionsfenster",
     ["  |cffffd100/dis|r - show or hide the button"] = "  |cffffd100/dis|r - Schaltflaeche anzeigen oder verstecken",
@@ -140,6 +159,7 @@ ns.L.deDE = {
     ["  |cffffd100/dis list|r - see the banned items"] = "  |cffffd100/dis list|r - zeigt die gesperrten Gegenstaende",
     ["  |cffffd100/dis clear|r - empty the banned list"] = "  |cffffd100/dis clear|r - leert die Sperrliste",
     ["  |cffffd100/dis blues|r / |cffffd100epics|r - which qualities count"] = "  |cffffd100/dis blues|r / |cffffd100epics|r - welche Qualitaeten zaehlen",
+    ["  |cffffd100/dis tooltip|r - show or hide the disenchanting materials"] = "  |cffffd100/dis tooltip|r - Entzauberungsmaterialien anzeigen oder verstecken",
     ["  |cffffd100/dis lock|r / |cffffd100reset|r - fix and reposition the button"] = "  |cffffd100/dis lock|r / |cffffd100reset|r - Schaltflaeche fixieren und zuruecksetzen",
     ["  |cffffd100/dis status|r - diagnosis"] = "  |cffffd100/dis status|r - Diagnose",
 }
@@ -201,6 +221,15 @@ ns.L.frFR = {
     ["%d candidates in your bags"] = "%d candidats dans vos sacs",
     ["Options"] = "Options",
 
+    ["Disenchant"] = "Desenchanter",
+    ["unconfirmed"] = "non confirme",
+    ["Better to disenchant"] = "Mieux vaut desenchanter",
+    ["Better to sell to a vendor"] = "Mieux vaut vendre au marchand",
+    ["Better to sell at the auction house"] = "Mieux vaut vendre a l'hotel des ventes",
+    ["Show disenchanting materials"] = "Afficher les materiaux de desenchantement",
+    ["materials in tooltips: on."] = "materiaux dans les infobulles : affiches.",
+    ["materials in tooltips: off."] = "materiaux dans les infobulles : masques.",
+
     ["commands:"] = "commandes :",
     ["  |cffffd100/dis options|r - open the options window"] = "  |cffffd100/dis options|r - ouvre la fenetre d'options",
     ["  |cffffd100/dis|r - show or hide the button"] = "  |cffffd100/dis|r - affiche ou masque le bouton",
@@ -208,6 +237,7 @@ ns.L.frFR = {
     ["  |cffffd100/dis list|r - see the banned items"] = "  |cffffd100/dis list|r - montre les objets exclus",
     ["  |cffffd100/dis clear|r - empty the banned list"] = "  |cffffd100/dis clear|r - vide la liste d'exclusion",
     ["  |cffffd100/dis blues|r / |cffffd100epics|r - which qualities count"] = "  |cffffd100/dis blues|r / |cffffd100epics|r - quelles qualites comptent",
+    ["  |cffffd100/dis tooltip|r - show or hide the disenchanting materials"] = "  |cffffd100/dis tooltip|r - affiche ou masque les materiaux de desenchantement",
     ["  |cffffd100/dis lock|r / |cffffd100reset|r - fix and reposition the button"] = "  |cffffd100/dis lock|r / |cffffd100reset|r - verrouiller et replacer le bouton",
     ["  |cffffd100/dis status|r - diagnosis"] = "  |cffffd100/dis status|r - diagnostic",
 }
@@ -269,6 +299,15 @@ ns.L.itIT = {
     ["%d candidates in your bags"] = "%d candidati nelle tue borse",
     ["Options"] = "Opzioni",
 
+    ["Disenchant"] = "Disincanta",
+    ["unconfirmed"] = "non confermato",
+    ["Better to disenchant"] = "Conviene disincantare",
+    ["Better to sell to a vendor"] = "Conviene vendere al mercante",
+    ["Better to sell at the auction house"] = "Conviene vendere alla casa d'aste",
+    ["Show disenchanting materials"] = "Mostra i materiali di disincanto",
+    ["materials in tooltips: on."] = "materiali nei tooltip: attivi.",
+    ["materials in tooltips: off."] = "materiali nei tooltip: disattivati.",
+
     ["commands:"] = "comandi:",
     ["  |cffffd100/dis options|r - open the options window"] = "  |cffffd100/dis options|r - apre la finestra opzioni",
     ["  |cffffd100/dis|r - show or hide the button"] = "  |cffffd100/dis|r - mostra o nasconde il pulsante",
@@ -276,6 +315,7 @@ ns.L.itIT = {
     ["  |cffffd100/dis list|r - see the banned items"] = "  |cffffd100/dis list|r - mostra gli oggetti esclusi",
     ["  |cffffd100/dis clear|r - empty the banned list"] = "  |cffffd100/dis clear|r - svuota la lista di esclusi",
     ["  |cffffd100/dis blues|r / |cffffd100epics|r - which qualities count"] = "  |cffffd100/dis blues|r / |cffffd100epics|r - quali qualita contano",
+    ["  |cffffd100/dis tooltip|r - show or hide the disenchanting materials"] = "  |cffffd100/dis tooltip|r - mostra o nasconde i materiali di disincanto",
     ["  |cffffd100/dis lock|r / |cffffd100reset|r - fix and reposition the button"] = "  |cffffd100/dis lock|r / |cffffd100reset|r - blocca e riposiziona il pulsante",
     ["  |cffffd100/dis status|r - diagnosis"] = "  |cffffd100/dis status|r - diagnostica",
 }
@@ -337,6 +377,15 @@ ns.L.ptBR = {
     ["%d candidates in your bags"] = "%d candidatos nas suas bolsas",
     ["Options"] = "Opcoes",
 
+    ["Disenchant"] = "Desencantar",
+    ["unconfirmed"] = "nao confirmado",
+    ["Better to disenchant"] = "Melhor desencantar",
+    ["Better to sell to a vendor"] = "Melhor vender ao mercador",
+    ["Better to sell at the auction house"] = "Melhor vender na casa de leiloes",
+    ["Show disenchanting materials"] = "Mostrar materiais de desencantamento",
+    ["materials in tooltips: on."] = "materiais nas dicas: ligado.",
+    ["materials in tooltips: off."] = "materiais nas dicas: desligado.",
+
     ["commands:"] = "comandos:",
     ["  |cffffd100/dis options|r - open the options window"] = "  |cffffd100/dis options|r - abre a janela de opcoes",
     ["  |cffffd100/dis|r - show or hide the button"] = "  |cffffd100/dis|r - mostra ou esconde o botao",
@@ -344,6 +393,7 @@ ns.L.ptBR = {
     ["  |cffffd100/dis list|r - see the banned items"] = "  |cffffd100/dis list|r - ve os itens ignorados",
     ["  |cffffd100/dis clear|r - empty the banned list"] = "  |cffffd100/dis clear|r - limpa a lista de ignorados",
     ["  |cffffd100/dis blues|r / |cffffd100epics|r - which qualities count"] = "  |cffffd100/dis blues|r / |cffffd100epics|r - quais qualidades contam",
+    ["  |cffffd100/dis tooltip|r - show or hide the disenchanting materials"] = "  |cffffd100/dis tooltip|r - mostra ou esconde os materiais de desencantamento",
     ["  |cffffd100/dis lock|r / |cffffd100reset|r - fix and reposition the button"] = "  |cffffd100/dis lock|r / |cffffd100reset|r - travar e reposicionar o botao",
     ["  |cffffd100/dis status|r - diagnosis"] = "  |cffffd100/dis status|r - diagnostico",
 }
@@ -405,6 +455,15 @@ ns.L.ruRU = {
     ["%d candidates in your bags"] = "Подходящих предметов в сумках: %d",
     ["Options"] = "Настройки",
 
+    ["Disenchant"] = "Распыление",
+    ["unconfirmed"] = "не подтверждено",
+    ["Better to disenchant"] = "Выгоднее распылить",
+    ["Better to sell to a vendor"] = "Выгоднее продать торговцу",
+    ["Better to sell at the auction house"] = "Выгоднее продать на аукционе",
+    ["Show disenchanting materials"] = "Показывать материалы распыления",
+    ["materials in tooltips: on."] = "материалы в подсказках: включены.",
+    ["materials in tooltips: off."] = "материалы в подсказках: выключены.",
+
     ["commands:"] = "команды:",
     ["  |cffffd100/dis options|r - open the options window"] = "  |cffffd100/dis options|r — открыть окно настроек",
     ["  |cffffd100/dis|r - show or hide the button"] = "  |cffffd100/dis|r — показать или скрыть кнопку",
@@ -412,6 +471,7 @@ ns.L.ruRU = {
     ["  |cffffd100/dis list|r - see the banned items"] = "  |cffffd100/dis list|r — показать исключённые предметы",
     ["  |cffffd100/dis clear|r - empty the banned list"] = "  |cffffd100/dis clear|r — очистить список исключений",
     ["  |cffffd100/dis blues|r / |cffffd100epics|r - which qualities count"] = "  |cffffd100/dis blues|r / |cffffd100epics|r — какие качества учитывать",
+    ["  |cffffd100/dis tooltip|r - show or hide the disenchanting materials"] = "  |cffffd100/dis tooltip|r — показать или скрыть материалы распыления",
     ["  |cffffd100/dis lock|r / |cffffd100reset|r - fix and reposition the button"] = "  |cffffd100/dis lock|r / |cffffd100reset|r — закрепить и вернуть кнопку",
     ["  |cffffd100/dis status|r - diagnosis"] = "  |cffffd100/dis status|r — диагностика",
 }
@@ -473,6 +533,15 @@ ns.L.koKR = {
     ["%d candidates in your bags"] = "가방 속 대상 %d개",
     ["Options"] = "설정",
 
+    ["Disenchant"] = "마력 추출",
+    ["unconfirmed"] = "미확인",
+    ["Better to disenchant"] = "마력 추출이 이득",
+    ["Better to sell to a vendor"] = "상인에게 파는 게 이득",
+    ["Better to sell at the auction house"] = "경매장에서 파는 게 이득",
+    ["Show disenchanting materials"] = "마력 추출 재료 표시",
+    ["materials in tooltips: on."] = "툴팁 재료 표시: 켜짐.",
+    ["materials in tooltips: off."] = "툴팁 재료 표시: 꺼짐.",
+
     ["commands:"] = "명령어:",
     ["  |cffffd100/dis options|r - open the options window"] = "  |cffffd100/dis options|r - 설정 창 열기",
     ["  |cffffd100/dis|r - show or hide the button"] = "  |cffffd100/dis|r - 버튼 표시/숨기기",
@@ -480,6 +549,7 @@ ns.L.koKR = {
     ["  |cffffd100/dis list|r - see the banned items"] = "  |cffffd100/dis list|r - 제외한 아이템 보기",
     ["  |cffffd100/dis clear|r - empty the banned list"] = "  |cffffd100/dis clear|r - 제외 목록 비우기",
     ["  |cffffd100/dis blues|r / |cffffd100epics|r - which qualities count"] = "  |cffffd100/dis blues|r / |cffffd100epics|r - 어떤 등급을 포함할지",
+    ["  |cffffd100/dis tooltip|r - show or hide the disenchanting materials"] = "  |cffffd100/dis tooltip|r - 마력 추출 재료 표시 켜기/끄기",
     ["  |cffffd100/dis lock|r / |cffffd100reset|r - fix and reposition the button"] = "  |cffffd100/dis lock|r / |cffffd100reset|r - 버튼 고정 및 위치 초기화",
     ["  |cffffd100/dis status|r - diagnosis"] = "  |cffffd100/dis status|r - 진단",
 }
@@ -541,6 +611,15 @@ ns.L.zhCN = {
     ["%d candidates in your bags"] = "背包中有 %d 件可分解",
     ["Options"] = "选项",
 
+    ["Disenchant"] = "分解",
+    ["unconfirmed"] = "未确认",
+    ["Better to disenchant"] = "分解更划算",
+    ["Better to sell to a vendor"] = "卖给商人更划算",
+    ["Better to sell at the auction house"] = "在拍卖行出售更划算",
+    ["Show disenchanting materials"] = "显示分解材料",
+    ["materials in tooltips: on."] = "物品提示中的材料：开启。",
+    ["materials in tooltips: off."] = "物品提示中的材料：关闭。",
+
     ["commands:"] = "命令：",
     ["  |cffffd100/dis options|r - open the options window"] = "  |cffffd100/dis options|r - 打开选项窗口",
     ["  |cffffd100/dis|r - show or hide the button"] = "  |cffffd100/dis|r - 显示或隐藏按钮",
@@ -548,6 +627,7 @@ ns.L.zhCN = {
     ["  |cffffd100/dis list|r - see the banned items"] = "  |cffffd100/dis list|r - 查看已排除的物品",
     ["  |cffffd100/dis clear|r - empty the banned list"] = "  |cffffd100/dis clear|r - 清空排除列表",
     ["  |cffffd100/dis blues|r / |cffffd100epics|r - which qualities count"] = "  |cffffd100/dis blues|r / |cffffd100epics|r - 包含哪些品质",
+    ["  |cffffd100/dis tooltip|r - show or hide the disenchanting materials"] = "  |cffffd100/dis tooltip|r - 显示或隐藏分解材料",
     ["  |cffffd100/dis lock|r / |cffffd100reset|r - fix and reposition the button"] = "  |cffffd100/dis lock|r / |cffffd100reset|r - 锁定与重置按钮位置",
     ["  |cffffd100/dis status|r - diagnosis"] = "  |cffffd100/dis status|r - 诊断",
 }
@@ -609,6 +689,15 @@ ns.L.zhTW = {
     ["%d candidates in your bags"] = "背包中有 %d 件可分解",
     ["Options"] = "選項",
 
+    ["Disenchant"] = "分解",
+    ["unconfirmed"] = "未確認",
+    ["Better to disenchant"] = "分解比較划算",
+    ["Better to sell to a vendor"] = "賣給商人比較划算",
+    ["Better to sell at the auction house"] = "在拍賣場出售比較划算",
+    ["Show disenchanting materials"] = "顯示分解材料",
+    ["materials in tooltips: on."] = "物品提示中的材料：開啟。",
+    ["materials in tooltips: off."] = "物品提示中的材料：關閉。",
+
     ["commands:"] = "指令：",
     ["  |cffffd100/dis options|r - open the options window"] = "  |cffffd100/dis options|r - 開啟選項視窗",
     ["  |cffffd100/dis|r - show or hide the button"] = "  |cffffd100/dis|r - 顯示或隱藏按鈕",
@@ -616,6 +705,7 @@ ns.L.zhTW = {
     ["  |cffffd100/dis list|r - see the banned items"] = "  |cffffd100/dis list|r - 檢視已排除的物品",
     ["  |cffffd100/dis clear|r - empty the banned list"] = "  |cffffd100/dis clear|r - 清空排除清單",
     ["  |cffffd100/dis blues|r / |cffffd100epics|r - which qualities count"] = "  |cffffd100/dis blues|r / |cffffd100epics|r - 包含哪些品質",
+    ["  |cffffd100/dis tooltip|r - show or hide the disenchanting materials"] = "  |cffffd100/dis tooltip|r - 顯示或隱藏分解材料",
     ["  |cffffd100/dis lock|r / |cffffd100reset|r - fix and reposition the button"] = "  |cffffd100/dis lock|r / |cffffd100reset|r - 鎖定與重設按鈕位置",
     ["  |cffffd100/dis status|r - diagnosis"] = "  |cffffd100/dis status|r - 診斷",
 }

@@ -18,4 +18,6 @@
 
 Locales.lua
 Style.lua
+NoDisenchant.lua
+Materials.lua
 DisenchantForever.lua

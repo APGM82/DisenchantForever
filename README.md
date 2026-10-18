@@ -32,6 +32,18 @@ your bags.
 - **Quality filters.** Blues can be toggled off. **Epics are excluded by
   default**, so a one-click button can never eat something valuable by
   accident; turn them on deliberately if you want them.
+- **What it turns into.** Hover over any weapon or armour and the tooltip
+  lists what disenchanting it gives: each material, its chance and how many.
+  The button's own tooltip names the item it is aimed at and shows the same.
+  One switch in the options window (or `/dis tooltip`) turns the materials
+  off everywhere.
+- **Sell or disenchant?** With [Auctionator](https://www.curseforge.com/wow/addons/auctionator)
+  installed, each material shows its auction price, the tooltip adds up the
+  average value of disenchanting, and it tells you whether that beats selling
+  the item to a vendor or at the auction house. Without Auctionator you still
+  see the materials, just without prices. On WoW Forever, Auctionator itself
+  only prices disenchanting for much later expansions, so it shows nothing
+  here.
 - **Movable and lockable.** Right-click drag to move, so the left click stays
   free for the thing you actually came for.
 - **Combat-safe.** The game forbids changing a secure button's action mid-fight,
@@ -41,9 +53,9 @@ your bags.
 
 ## Options window
 
-Everything can be driven from a window: checkboxes for the button and the
-quality filters, a live count of what is left, and the ban list with a cross on
-each row so you can let a single item back in. Open it with the small gear on
+Everything can be driven from a window: checkboxes for the button, the
+quality filters and the disenchanting materials, a live count of what is left,
+and the ban list with a cross on each row so you can let a single item back in. Open it with the small gear on
 the button, or with `/dis options`.
 
 The window is built from plain frames and textures rather than Blizzard's
@@ -67,6 +79,7 @@ screenshot from another player works whatever language you play in.
 | `/dis clear` | Empty the ban list |
 | `/dis blues` | Include or exclude blue items |
 | `/dis epics` | Include or exclude epics (off by default) |
+| `/dis tooltip` | Show or hide the disenchanting materials |
 | `/dis lock` / `/dis reset` | Fix the button in place, or put it back |
 | `/dis status` | Report what the addon can see, for diagnosis |
 
@@ -99,6 +112,25 @@ Note that Forever runs Classic content on a modern interface codebase, so
 several APIs live where retail keeps them rather than where Classic did. This
 addon resolves each one wherever it exists instead of assuming, and says so
 plainly if something is missing rather than failing silently.
+
+## Where the disenchanting numbers come from
+
+The game client knows which bracket an item falls into (by item level,
+quality and weapon or armour) but not what each bracket gives: that lives on
+the server. The brackets come straight from the WoW Forever client. The
+materials, chances and amounts come from
+[vmangos](https://github.com/vmangos/core), which reproduces Classic 1.12, and
+were checked against [cmangos](https://github.com/cmangos/classic-db). The two
+disagree in only two small places, which are noted in the code.
+
+Forever added one bracket that Classic never had: blue items of item level 5
+to 15. Nobody has published what they give yet, so the tooltip marks that
+line as unconfirmed and does not price it.
+
+Items the client marks as impossible to disenchant (PvP rank rewards and
+enchanter-made wands, for example) show nothing. The game does not expose
+that mark to addons, so the list ships with the addon and is regenerated from
+the client data after each patch with `herramientas/actualizar_datos.py`.
 
 ## Installation
 

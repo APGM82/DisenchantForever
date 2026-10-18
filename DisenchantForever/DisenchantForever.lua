@@ -11,20 +11,23 @@ local QUALITY_UNCOMMON, QUALITY_RARE, QUALITY_EPIC = 2, 3, 4
 local CLASS_WEAPON, CLASS_ARMOR = 2, 4
 
 local DEFAULTS = {
-    epicos   = false,       -- epicos fuera por defecto
-    raros    = true,
-    locked   = false,
-    point    = "CENTER",
-    relPoint = "CENTER",
-    x        = 200,
-    y        = 0,
+    epicos     = false,     -- epicos fuera por defecto
+    raros      = true,
+    materiales = true,      -- lo que da al desencantar, en las ventanitas de objetos y del boton
+    locked     = false,
+    point      = "CENTER",
+    relPoint   = "CENTER",
+    x          = 200,
+    y          = 0,
 }
 
 local db
 local button, banButton, optionsButton, icon, countText, nameText
 local options
 local spellName
+local current           -- enlace del objeto al que apunta el boton
 local pending           -- refresco pendiente hasta salir de combate
+local tooltipError      -- ultimo fallo al escribir en una ventanita, para /dis status
 
 -- se llaman entre ellas
 local Refresh, RefreshOptions, PrintState
@@ -142,6 +145,152 @@ local function FindNext()
     return first, total
 end
 
+-- ------------------------------------------------------------- materiales
+
+local M = ns.materials
+local CALLER = "Disenchant Forever"     -- Auctionator pide el nombre de quien pregunta
+
+local DetailedLevel = (C_Item and C_Item.GetDetailedItemLevelInfo) or _G.GetDetailedItemLevelInfo
+local NameByID      = C_Item and C_Item.GetItemNameByID
+local IconByID      = (C_Item and C_Item.GetItemIconByID) or _G.GetItemIcon
+
+local function Money(copper)
+    copper = math.floor((copper or 0) + 0.5)
+    if GetMoneyString then return GetMoneyString(copper, true) end
+    return string.format("%dg %ds %dc", math.floor(copper / 10000), math.floor(copper / 100) % 100, copper % 100)
+end
+
+local function MaterialName(itemID)
+    return (NameByID and NameByID(itemID)) or M.names[itemID]
+end
+
+-- los precios de subasta salen de Auctionator; sin el, solo los materiales
+local function AuctionAPI()
+    return Auctionator and Auctionator.API and Auctionator.API.v1
+end
+
+-- objeto por id o por enlace; nil si no lo sabe
+local function AuctionPrice(item)
+    local api = AuctionAPI()
+    if not api then return nil end
+    local get = type(item) == "number" and api.GetAuctionPriceByItemID or api.GetAuctionPriceByItemLink
+    if not get then return nil end
+    local ok, price = pcall(get, CALLER, item)
+    if ok and type(price) == "number" and price > 0 then return price end
+    return nil
+end
+
+local function MaterialPrice(itemID)
+    local price = AuctionPrice(itemID)
+    if price then return price end
+    local pair = M.pairs[itemID]
+    local other = pair and AuctionPrice(pair[1])
+    return other and other * pair[2]
+end
+
+-- tramo de un objeto (enlace o id) y su precio de tienda
+local function DisenchantOf(item)
+    if not item or not GetInfo then return nil end
+    local itemID = type(item) == "number" and item or ItemIDOf(item)
+    if itemID and ns.noDisenchant[itemID] then return nil end
+    local _, _, quality, level, _, _, _, _, _, _, sellPrice, classID = GetInfo(item)
+    -- lo que no se vende en la tienda casi nunca se deja desencantar
+    if not quality or not sellPrice or sellPrice <= 0 then return nil end
+    if DetailedLevel then level = DetailedLevel(item) or level end
+    return M.Find(classID, quality, level), sellPrice
+end
+
+-- lo que sale y si compensa; false si el objeto no se desencanta
+local function AddDisenchantLines(tooltip, item)
+    local row, sellPrice = DisenchantOf(item)
+    if not row then return false end
+
+    local priced = AuctionAPI() ~= nil
+    local total, complete = M.Value(row, MaterialPrice)
+
+    -- media de lo que se saca; "+?" si falta algun precio
+    local value = ""
+    if total > 0 then
+        value = Money(total) .. (complete and "" or " +?")
+    elseif priced then
+        value = "?"
+    end
+
+    local gold, text = S.colors.gold, S.colors.text
+    tooltip:AddLine(" ")
+    tooltip:AddDoubleLine(spellName or L["Disenchant"], value,
+        gold[1], gold[2], gold[3], text[1], text[2], text[3])
+
+    for i = 3, #row do
+        local chance, low, high, itemID = unpack(row[i])
+        local icon = IconByID and IconByID(itemID)
+        local left = string.format("  %s  %s  %s%s",
+            row.unconfirmed and "?" or (chance .. "%"),
+            low == high and low or (low .. "-" .. high),
+            icon and ("|T" .. icon .. ":0|t ") or "",
+            MaterialName(itemID) or "?")
+        if row.unconfirmed then
+            left = left .. " |cff999999(" .. L["unconfirmed"] .. ")|r"
+        end
+
+        local right = ""
+        if priced then
+            local each = MaterialPrice(itemID)
+            right = each and Money(each) or "?"
+        end
+        tooltip:AddDoubleLine(left, right, text[1], text[2], text[3], text[1], text[2], text[3])
+    end
+
+    -- con precios a medias solo se puede decir si ya gana desencantar
+    if total > 0 then
+        local best, where = sellPrice, "Better to sell to a vendor"
+        local auction = AuctionPrice(item)
+        if auction and auction > best then
+            best, where = auction, "Better to sell at the auction house"
+        end
+        if total > best then
+            tooltip:AddLine(L["Better to disenchant"], 0.3, 1, 0.3)
+        elseif complete then
+            tooltip:AddLine(L[where], 1, 0.6, 0.2)
+        end
+    end
+    return true
+end
+
+-- un fallo aqui no puede romper la ventanita de los objetos
+local function SafeDisenchantLines(tooltip, item)
+    local ok, added = pcall(AddDisenchantLines, tooltip, item)
+    if not ok then
+        tooltipError = added
+        return false
+    end
+    return added
+end
+
+local function OnItemTooltip(tooltip, data)
+    if not db or not db.materiales then return end
+    if tooltip ~= GameTooltip and tooltip ~= ItemRefTooltip then return end
+
+    local ok, err = pcall(function()
+        local _, link = tooltip:GetItem()
+        -- en combate puede llegar un valor secreto
+        if issecretvalue and issecretvalue(link) then return end
+        local item = link or (data and data.id)
+        if item and AddDisenchantLines(tooltip, item) then tooltip:Show() end
+    end)
+    if not ok then tooltipError = err end
+end
+
+local function HookTooltips()
+    if TooltipDataProcessor and TooltipDataProcessor.AddTooltipPostCall and Enum and Enum.TooltipDataType then
+        TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, OnItemTooltip)
+    else
+        for _, tooltip in ipairs({ GameTooltip, ItemRefTooltip }) do
+            tooltip:HookScript("OnTooltipSetItem", function(self) OnItemTooltip(self) end)
+        end
+    end
+end
+
 -- ------------------------------------------------------------------ boton
 
 function Refresh()
@@ -158,22 +307,29 @@ function Refresh()
     local target, total = FindNext()
 
     if not target or not spellName then
+        current = nil
         button:SetAttribute("macrotext", "")
         icon:SetTexture("Interface\\Icons\\INV_Enchant_Disenchant")
         icon:SetDesaturated(true)
         countText:SetText("")
         nameText:SetText(spellName and L["nothing to disenchant"]
             or ("|cffff5555" .. L["no spell"] .. "|r"))
-        return
+    else
+        current = target.link
+        button:SetAttribute("macrotext",
+            string.format("/cast %s\n/use %d %d", spellName, target.bag, target.slot))
+
+        icon:SetTexture(target.texture or "Interface\\Icons\\INV_Enchant_Disenchant")
+        icon:SetDesaturated(false)
+        countText:SetText(total > 1 and total or "")
+        nameText:SetText(target.link)
     end
 
-    button:SetAttribute("macrotext",
-        string.format("/cast %s\n/use %d %d", spellName, target.bag, target.slot))
-
-    icon:SetTexture(target.texture or "Interface\\Icons\\INV_Enchant_Disenchant")
-    icon:SetDesaturated(false)
-    countText:SetText(total > 1 and total or "")
-    nameText:SetText(target.link)
+    -- con el raton encima, que la ventanita siga al objeto nuevo.
+    -- Oculta puede seguir teniendo dueno: sin IsShown volveria a salir sola.
+    if GameTooltip:IsShown() and GameTooltip:IsOwned(button) then
+        button:GetScript("OnEnter")(button)
+    end
 end
 
 -- --------------------------------------------------------------- vetados
@@ -279,7 +435,7 @@ end
 
 local function BuildOptions()
     options = CreateFrame("Frame", "DisenchantForeverOpciones", UIParent)
-    options:SetSize(330, 400)
+    options:SetSize(330, 430)
     options:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
     options:SetFrameStrata("DIALOG")
     options:SetClampedToScreen(true)
@@ -317,37 +473,42 @@ local function BuildOptions()
         function(value) db.epicos = value end)
     epicCheck:SetPoint("TOPLEFT", 16, -126)
 
+    local materialsCheck = MakeCheck(options, "Show disenchanting materials",
+        function() return db.materiales end,
+        function(value) db.materiales = value end)
+    materialsCheck:SetPoint("TOPLEFT", 16, -156)
+
     local resetButton = MakeButton(options, 120, "Reset position", function()
         db.point, db.relPoint = DEFAULTS.point, DEFAULTS.relPoint
         db.x, db.y = DEFAULTS.x, DEFAULTS.y
         button:ClearAllPoints()
         button:SetPoint(db.point, UIParent, db.relPoint, db.x, db.y)
     end)
-    resetButton:SetPoint("TOPLEFT", 16, -154)
+    resetButton:SetPoint("TOPLEFT", 16, -184)
 
     local diagButton = MakeButton(options, 150, "Diagnosis to chat", function()
         PrintState()
     end)
-    diagButton:SetPoint("TOPLEFT", 146, -154)
+    diagButton:SetPoint("TOPLEFT", 146, -184)
 
     -- estado
     local status = options:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    status:SetPoint("TOPLEFT", 16, -186)
+    status:SetPoint("TOPLEFT", 16, -216)
     status:SetTextColor(unpack(S.colors.dim))
 
     -- lista de vetados
     local listTitle = S.Header(options:CreateFontString(nil, "OVERLAY", "GameFontNormal"), 16)
-    listTitle:SetPoint("TOPLEFT", 16, -208)
+    listTitle:SetPoint("TOPLEFT", 16, -238)
     listTitle:SetText(L["Banned items"])
 
     local listEdge = options:CreateTexture(nil, "BACKGROUND")
-    listEdge:SetPoint("TOPLEFT", 14, -228)
+    listEdge:SetPoint("TOPLEFT", 14, -258)
     listEdge:SetPoint("BOTTOMRIGHT", -14, 44)
     listEdge:SetColorTexture(0, 0, 0, 0)
     S.Inset(options, listEdge)
 
     local empty = options:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    empty:SetPoint("TOPLEFT", 24, -238)
+    empty:SetPoint("TOPLEFT", 24, -268)
     empty:SetTextColor(unpack(S.colors.dim))
 
     local more = options:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
@@ -396,7 +557,7 @@ local function BuildOptions()
     for i = 1, MAX_ROWS do
         local row = CreateFrame("Frame", nil, options)
         row:SetSize(268, ROW_HEIGHT)
-        row:SetPoint("TOPLEFT", 22, -234 - (i - 1) * ROW_HEIGHT)
+        row:SetPoint("TOPLEFT", 22, -264 - (i - 1) * ROW_HEIGHT)
 
         row.text = row:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
         row.text:SetPoint("LEFT", 0, 0)
@@ -417,7 +578,7 @@ local function BuildOptions()
     end)
     clearButton:SetPoint("BOTTOMLEFT", 16, 14)
 
-    options.checks = { showCheck, lockCheck, blueCheck, epicCheck }
+    options.checks = { showCheck, lockCheck, blueCheck, epicCheck, materialsCheck }
     options.status = status
     options.empty = empty
     options.more = more
@@ -512,6 +673,11 @@ local function Build()
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:AddLine("Disenchant Forever")
+        if current then
+            GameTooltip:AddLine(current)
+            if db.materiales then SafeDisenchantLines(GameTooltip, current) end
+            GameTooltip:AddLine(" ")
+        end
         GameTooltip:AddLine(L["Left click: disenchant the item shown."], 1, 1, 1)
         GameTooltip:AddLine(L["Right click and drag: move the button."], 1, 1, 1)
         GameTooltip:AddLine(L["The red X bans the item and moves to the next one."], 1, 1, 1)
@@ -586,6 +752,11 @@ function PrintState()
     Say("  functions: bags=%s item=%s",
         (NumSlots and ContainerInfo) and yes or noLoud,
         (GetInfoInstant or GetInfo) and yes or noLoud)
+    Say("  materials in tooltips: %s | auction prices: %s",
+        db.materiales and yes or no, AuctionAPI() and "Auctionator" or L["none"])
+    if tooltipError then
+        Say("  |cffff5555last tooltip error:|r %s", tostring(tooltipError))
+    end
 
     -- lo util cuando el clic no hace nada
     if not button then
@@ -661,6 +832,11 @@ local function HandleSlash(msg)
         Refresh()
         Say(db.epicos and "|cffff5555epics are in. Careful.|r" or "epics are out.")
 
+    elseif cmd == "tooltip" then
+        db.materiales = not db.materiales
+        RefreshOptions()
+        Say(db.materiales and "materials in tooltips: on." or "materials in tooltips: off.")
+
     else
         Say("commands:")
         Say("  |cffffd100/dis options|r - open the options window")
@@ -669,6 +845,7 @@ local function HandleSlash(msg)
         Say("  |cffffd100/dis list|r - see the banned items")
         Say("  |cffffd100/dis clear|r - empty the banned list")
         Say("  |cffffd100/dis blues|r / |cffffd100epics|r - which qualities count")
+        Say("  |cffffd100/dis tooltip|r - show or hide the disenchanting materials")
         Say("  |cffffd100/dis lock|r / |cffffd100reset|r - fix and reposition the button")
         Say("  |cffffd100/dis status|r - diagnosis")
     end
@@ -698,6 +875,12 @@ loader:SetScript("OnEvent", function(self, event, name)
         BuildOptions()
         ApplyPosition()
         Refresh()
+        HookTooltips()
+
+        -- que los nombres traducidos de los materiales esten listos al pasar el raton
+        if C_Item and C_Item.RequestLoadItemDataByID then
+            for itemID in pairs(M.names) do C_Item.RequestLoadItemDataByID(itemID) end
+        end
 
         SLASH_DISENCHANTFOREVER1 = "/dis"
         SLASH_DISENCHANTFOREVER2 = "/disenchant"
