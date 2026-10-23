@@ -137,7 +137,7 @@ and is regenerated from the client data after each patch with
 ## Installation
 
 1. Extract the `DisenchantForever` folder into
-   `World of Warcraft\_classic_beta_\Interface\AddOns\`
+   `World of Warcraft\_forever_\Interface\AddOns\`
 2. Restart the game completely — a reload is not enough for a new addon.
 3. Make sure it is ticked in the AddOns list on the character screen.
 
