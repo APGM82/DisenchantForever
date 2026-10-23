@@ -23,7 +23,9 @@ your bags.
 ## Features
 
 - **Auto-aim.** Always targeted at the next disenchantable item: weapons and
-  armour of uncommon quality or better. Whites and greys are skipped, because
+  armour of uncommon quality or better, plus the few other items that are meant
+  to be disenchanted for a reward of their own, such as the wax effigies of the
+  enchanting quest at the Tower of Azora. Whites and greys are skipped, because
   they cannot be disenchanted at all, and so are the few items the game will
   not let you disenchant, such as enchanter-made wands.
 - **Counter.** Shows how many candidates are left, so you know when you are done.
@@ -36,8 +38,9 @@ your bags.
 - **What it turns into.** Hover over any weapon or armour and the tooltip
   lists what disenchanting it gives: each material, its chance and how many.
   The button's own tooltip names the item it is aimed at and shows the same.
-  One switch in the options window (or `/dis tooltip`) turns the materials
-  off everywhere.
+  Items with a reward of their own say so instead, since only the server knows
+  what they give. One switch in the options window (or `/dis tooltip`) turns
+  the materials off everywhere.
 - **Sell or disenchant?** With [Auctionator](https://www.curseforge.com/wow/addons/auctionator)
   installed, each material shows its auction price, the tooltip adds up the
   average value of disenchanting, and it tells you whether that beats selling

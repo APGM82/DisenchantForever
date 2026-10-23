@@ -8,6 +8,9 @@ local PREFIX = "|cffa335eeDisenchant Forever|r: "
 local DISENCHANT_SPELL = 13262
 
 local QUALITY_UNCOMMON, QUALITY_RARE, QUALITY_EPIC = 2, 3, 4
+
+-- OwnLoot.lua es nuevo: con un /reload sin reiniciar el juego aun no esta cargado
+local OWN_LOOT = ns.ownLoot or {}
 local CLASS_WEAPON, CLASS_ARMOR = 2, 4
 
 local DEFAULTS = {
@@ -126,6 +129,8 @@ local function IsCandidate(link, quality)
     -- lo que el juego no deja desencantar: el hechizo falla y el boton se quedaba parado ahi
     local itemID = ItemIDOf(link)
     if itemID and ns.noDisenchant[itemID] then return false end
+    -- los que se desencantan en su propio botin pueden ser de otra clase, como las efigies de cera
+    if itemID and OWN_LOOT[itemID] then return true end
     local classID = ClassOf(link)
     return classID == CLASS_WEAPON or classID == CLASS_ARMOR
 end
@@ -205,6 +210,17 @@ end
 
 -- lo que sale y si compensa; false si el objeto no se desencanta
 local function AddDisenchantLines(tooltip, item)
+    local gold, text = S.colors.gold, S.colors.text
+
+    -- su botin lo decide el servidor: no hay tramo ni precio que dar
+    local itemID = type(item) == "number" and item or ItemIDOf(item)
+    if itemID and OWN_LOOT[itemID] then
+        tooltip:AddLine(" ")
+        tooltip:AddLine(spellName or L["Disenchant"], gold[1], gold[2], gold[3])
+        tooltip:AddLine("  " .. L["Gives its own items, not the usual materials"], text[1], text[2], text[3])
+        return true
+    end
+
     local row, sellPrice = DisenchantOf(item)
     if not row then return false end
 
@@ -219,7 +235,6 @@ local function AddDisenchantLines(tooltip, item)
         value = "?"
     end
 
-    local gold, text = S.colors.gold, S.colors.text
     tooltip:AddLine(" ")
     tooltip:AddDoubleLine(spellName or L["Disenchant"], value,
         gold[1], gold[2], gold[3], text[1], text[2], text[3])

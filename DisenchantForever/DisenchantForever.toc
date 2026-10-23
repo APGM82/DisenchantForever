@@ -19,5 +19,6 @@
 Locales.lua
 Style.lua
 NoDisenchant.lua
+OwnLoot.lua
 Materials.lua
 DisenchantForever.lua

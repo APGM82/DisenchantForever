@@ -65,6 +65,7 @@ ns.L.esES = {
 
     ["Disenchant"] = "Desencantar",
     ["unconfirmed"] = "sin confirmar",
+    ["Gives its own items, not the usual materials"] = "Da sus propios objetos, no los materiales de siempre",
     ["Better to disenchant"] = "Mejor desencantar",
     ["Better to sell to a vendor"] = "Mejor venderlo en la tienda",
     ["Better to sell at the auction house"] = "Mejor venderlo en la subasta",
@@ -145,6 +146,7 @@ ns.L.deDE = {
 
     ["Disenchant"] = "Entzaubern",
     ["unconfirmed"] = "unbestaetigt",
+    ["Gives its own items, not the usual materials"] = "Ergibt eigene Gegenstaende, nicht die ueblichen Materialien",
     ["Better to disenchant"] = "Besser entzaubern",
     ["Better to sell to a vendor"] = "Besser beim Haendler verkaufen",
     ["Better to sell at the auction house"] = "Besser im Auktionshaus verkaufen",
@@ -223,6 +225,7 @@ ns.L.frFR = {
 
     ["Disenchant"] = "Desenchanter",
     ["unconfirmed"] = "non confirme",
+    ["Gives its own items, not the usual materials"] = "Donne ses propres objets, pas les composants habituels",
     ["Better to disenchant"] = "Mieux vaut desenchanter",
     ["Better to sell to a vendor"] = "Mieux vaut vendre au marchand",
     ["Better to sell at the auction house"] = "Mieux vaut vendre a l'hotel des ventes",
@@ -301,6 +304,7 @@ ns.L.itIT = {
 
     ["Disenchant"] = "Disincanta",
     ["unconfirmed"] = "non confermato",
+    ["Gives its own items, not the usual materials"] = "Fornisce oggetti propri, non i soliti materiali",
     ["Better to disenchant"] = "Conviene disincantare",
     ["Better to sell to a vendor"] = "Conviene vendere al mercante",
     ["Better to sell at the auction house"] = "Conviene vendere alla casa d'aste",
@@ -379,6 +383,7 @@ ns.L.ptBR = {
 
     ["Disenchant"] = "Desencantar",
     ["unconfirmed"] = "nao confirmado",
+    ["Gives its own items, not the usual materials"] = "Rende itens proprios, nao os materiais de sempre",
     ["Better to disenchant"] = "Melhor desencantar",
     ["Better to sell to a vendor"] = "Melhor vender ao mercador",
     ["Better to sell at the auction house"] = "Melhor vender na casa de leiloes",
@@ -457,6 +462,7 @@ ns.L.ruRU = {
 
     ["Disenchant"] = "Распыление",
     ["unconfirmed"] = "не подтверждено",
+    ["Gives its own items, not the usual materials"] = "Дает особые предметы, а не обычные материалы",
     ["Better to disenchant"] = "Выгоднее распылить",
     ["Better to sell to a vendor"] = "Выгоднее продать торговцу",
     ["Better to sell at the auction house"] = "Выгоднее продать на аукционе",
@@ -535,6 +541,7 @@ ns.L.koKR = {
 
     ["Disenchant"] = "마력 추출",
     ["unconfirmed"] = "미확인",
+    ["Gives its own items, not the usual materials"] = "평소 재료가 아닌 전용 아이템이 나옵니다",
     ["Better to disenchant"] = "마력 추출이 이득",
     ["Better to sell to a vendor"] = "상인에게 파는 게 이득",
     ["Better to sell at the auction house"] = "경매장에서 파는 게 이득",
@@ -613,6 +620,7 @@ ns.L.zhCN = {
 
     ["Disenchant"] = "分解",
     ["unconfirmed"] = "未确认",
+    ["Gives its own items, not the usual materials"] = "分解得到专属物品，而非常规材料",
     ["Better to disenchant"] = "分解更划算",
     ["Better to sell to a vendor"] = "卖给商人更划算",
     ["Better to sell at the auction house"] = "在拍卖行出售更划算",
@@ -691,6 +699,7 @@ ns.L.zhTW = {
 
     ["Disenchant"] = "分解",
     ["unconfirmed"] = "未確認",
+    ["Gives its own items, not the usual materials"] = "分解得到專屬物品，而非一般材料",
     ["Better to disenchant"] = "分解比較划算",
     ["Better to sell to a vendor"] = "賣給商人比較划算",
     ["Better to sell at the auction house"] = "在拍賣場出售比較划算",
