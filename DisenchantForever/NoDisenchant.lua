@@ -1,5 +1,5 @@
 -- Armas y armaduras que el juego no deja desencantar (flag 0x8000 de ItemSparse).
--- Generado por herramientas/actualizar_datos.py con la build 1.60.1.70450: no tocar a mano.
+-- Generado por herramientas/actualizar_datos.py con la build 1.60.1.70532: no tocar a mano.
 
 local _, ns = ...
 
