@@ -1,6 +1,6 @@
 -- Objetos que se desencantan en un botin propio y no en los materiales de siempre
 -- (flag 0x40000000 de Flags_1 en ItemSparse), sean de la clase que sean.
--- Generado por herramientas/actualizar_datos.py con la build 1.60.1.70532: no tocar a mano.
+-- Generado por herramientas/actualizar_datos.py con la build 1.60.1.70888: no tocar a mano.
 
 local _, ns = ...
 
