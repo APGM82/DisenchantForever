@@ -6,6 +6,7 @@ local ADDON, ns = ...
 
 local PREFIX = "|cffa335eeDisenchant Forever|r: "
 local DISENCHANT_SPELL = 13262
+local SKILL_ENCHANTING = 333    -- linea de habilidad de Encantamiento en GetProfessionInfo
 
 local QUALITY_UNCOMMON, QUALITY_RARE, QUALITY_EPIC = 2, 3, 4
 
@@ -22,6 +23,8 @@ local DEFAULTS = {
     relPoint   = "CENTER",
     x          = 200,
     y          = 0,
+    -- hidden: true/false si el jugador eligio ocultarlo o mostrarlo; sin elegir (nil)
+    -- se ve solo si el personaje sabe desencantar. No va aqui: el nil es un valor.
 }
 
 local db
@@ -30,6 +33,7 @@ local options
 local spellName
 local current           -- enlace del objeto al que apunta el boton
 local pending           -- refresco pendiente hasta salir de combate
+local positionPending   -- recolocar pendiente hasta salir de combate
 local tooltipError      -- ultimo fallo al escribir en una ventanita, para /dis status
 
 -- se llaman entre ellas
@@ -69,6 +73,45 @@ local function SpellName(spellID)
         return (_G.GetSpellInfo(spellID))
     end
     return nil
+end
+
+local function InCombat()
+    return InCombatLockdown and InCombatLockdown()
+end
+
+-- nil si la funcion no existe, falla o da un valor secreto
+local function Ask(fn, ...)
+    if type(fn) ~= "function" then return nil end
+    local ok, value = pcall(fn, ...)
+    if not ok or (issecretvalue and issecretvalue(value)) then return nil end
+    return value
+end
+
+local function HasEnchanting()
+    local first, second = GetProfessions()
+    for _, index in pairs({ first, second }) do
+        if select(7, GetProfessionInfo(index)) == SKILL_ENCHANTING then return true end
+    end
+    return false
+end
+
+-- el hechizo aprendido o la profesion. Si nada responde se da por sabido:
+-- mejor que sobre el boton a que se le esconda a un encantador.
+local function KnowsDisenchant()
+    local spellbook = C_SpellBook and C_SpellBook.IsSpellKnown
+    local checks = {
+        function() return Ask(_G.IsPlayerSpell, DISENCHANT_SPELL) end,
+        function() return Ask(spellbook, DISENCHANT_SPELL) end,
+        function() return Ask(_G.IsSpellKnown, DISENCHANT_SPELL) end,
+        function() return Ask(HasEnchanting) end,
+    }
+    local answered = false
+    for _, check in ipairs(checks) do
+        local known = check()
+        if known == true then return true end
+        if known ~= nil then answered = true end
+    end
+    return not answered
 end
 
 -- dos firmas posibles segun la version
@@ -315,8 +358,11 @@ function Refresh()
     if not button then return end
     if RefreshOptions then RefreshOptions() end
 
+    -- oculto no hace falta mirar las bolsas: al mostrarlo se refresca
+    if not button:IsShown() then return end
+
     -- en combate no se puede tocar; se hace al salir
-    if InCombatLockdown and InCombatLockdown() then
+    if InCombat() then
         pending = true
         return
     end
@@ -348,6 +394,58 @@ function Refresh()
     if GameTooltip:IsShown() and GameTooltip:IsOwned(button) then
         button:GetScript("OnEnter")(button)
     end
+end
+
+-- ----------------------------------------------------- mostrar y colocar
+-- El boton es seguro: en combate el juego no deja mostrarlo, ocultarlo ni
+-- moverlo. Se guarda lo que se quiere y se aplica al salir del combate.
+
+-- lo que eligio el jugador; si no eligio, solo si el personaje sabe desencantar
+local function WantShown()
+    if db.hidden ~= nil then return not db.hidden end
+    return KnowsDisenchant()
+end
+
+-- false si se queda pendiente del combate
+local function ApplyVisibility()
+    if not button then return true end
+    local want = WantShown()
+    if (button:IsShown() and true or false) == want then return true end
+    if InCombat() then return false end
+    if want then button:Show() else button:Hide() end
+    Refresh()
+    return true
+end
+
+-- eleccion del jugador, guardada por personaje
+local function SetShownByChoice(show)
+    db.hidden = not show
+    if ApplyVisibility() then return true end
+    Say(show and "the button will show when combat ends." or "the button will hide when combat ends.")
+    return false
+end
+
+local function ApplyPosition()
+    if InCombat() then
+        positionPending = true
+        return
+    end
+    positionPending = nil
+    button:ClearAllPoints()
+    button:SetPoint(db.point, UIParent, db.relPoint, db.x, db.y)
+end
+
+local function ResetPosition()
+    db.point, db.relPoint = DEFAULTS.point, DEFAULTS.relPoint
+    db.x, db.y = DEFAULTS.x, DEFAULTS.y
+    ApplyPosition()
+end
+
+-- una vez por personaje: que no parezca que el addon no carga
+local function NoticeHidden()
+    if db.hidden ~= nil or db.avisoOculto or KnowsDisenchant() then return end
+    db.avisoOculto = true
+    Say("this character does not know Disenchant, so the button stays hidden. |cffffd100/dis|r shows it.")
 end
 
 -- --------------------------------------------------------------- vetados
@@ -469,11 +567,8 @@ local function BuildOptions()
     close:SetPoint("TOPRIGHT", -8, -8)
 
     -- casillas
-    local showCheck = MakeCheck(options, "Show the button",
-        function() return button:IsShown() end,
-        function(value)
-            if value then button:Show() else button:Hide() end
-        end)
+    -- lo elegido, no lo que se ve: en combate puede ir por detras
+    local showCheck = MakeCheck(options, "Show the button", WantShown, SetShownByChoice)
     showCheck:SetPoint("TOPLEFT", 16, -44)
 
     local lockCheck = MakeCheck(options, "Lock in place",
@@ -496,12 +591,7 @@ local function BuildOptions()
         function(value) db.materiales = value end)
     materialsCheck:SetPoint("TOPLEFT", 16, -156)
 
-    local resetButton = MakeButton(options, 120, "Reset position", function()
-        db.point, db.relPoint = DEFAULTS.point, DEFAULTS.relPoint
-        db.x, db.y = DEFAULTS.x, DEFAULTS.y
-        button:ClearAllPoints()
-        button:SetPoint(db.point, UIParent, db.relPoint, db.x, db.y)
-    end)
+    local resetButton = MakeButton(options, 120, "Reset position", ResetPosition)
     resetButton:SetPoint("TOPLEFT", 16, -184)
 
     local diagButton = MakeButton(options, 150, "Diagnosis to chat", function()
@@ -668,9 +758,14 @@ local function Build()
     -- con el derecho: el izquierdo es para desencantar
     button:RegisterForDrag("RightButton")
     button:SetScript("OnDragStart", function(self)
-        if not db.locked then self:StartMoving() end
+        -- en combate el juego no deja mover un boton seguro
+        if db.locked or InCombat() then return end
+        self.moving = true
+        self:StartMoving()
     end)
     button:SetScript("OnDragStop", function(self)
+        if not self.moving then return end
+        self.moving = nil
         self:StopMovingOrSizing()
         local point, _, relPoint, x, y = self:GetPoint()
         db.point, db.relPoint, db.x, db.y = point, relPoint, x, y
@@ -699,7 +794,7 @@ local function Build()
         GameTooltip:AddLine(L["Left click: disenchant the item shown."], 1, 1, 1)
         GameTooltip:AddLine(L["Right click and drag: move the button."], 1, 1, 1)
         GameTooltip:AddLine(L["The red X bans the item and moves to the next one."], 1, 1, 1)
-        GameTooltip:AddLine(L["/dis for the options."], 0.6, 0.6, 0.6)
+        GameTooltip:AddLine(L["/dis options opens the options window."], 0.6, 0.6, 0.6)
         GameTooltip:Show()
     end)
     button:SetScript("OnLeave", function() GameTooltip:Hide() end)
@@ -750,11 +845,6 @@ local function Build()
     S.Corner(optionsButton)
 end
 
-local function ApplyPosition()
-    button:ClearAllPoints()
-    button:SetPoint(db.point, UIParent, db.relPoint, db.x, db.y)
-end
-
 -- --------------------------------------------------------------- comandos
 
 function PrintState()
@@ -792,6 +882,9 @@ function PrintState()
         Say("  button order: |cffff5555empty|r")
     end
 
+    Say("  visibility: %s | knows Disenchant: %s",
+        db.hidden == nil and "auto" or (db.hidden and "hidden by choice" or "shown by choice"),
+        KnowsDisenchant() and yes or no)
     Say("  type=%s shown=%s enabled=%s",
         tostring(button:GetAttribute("type")),
         button:IsShown() and yes or no,
@@ -805,14 +898,12 @@ local function HandleSlash(msg)
 
     -- ordenes solo en ingles; se traduce la explicacion, no la palabra
     if cmd == "" then
-        if button:IsShown() then
-            button:Hide()
-            Say("button hidden. |cffffd100/dis|r brings it back.")
-        else
-            button:Show()
-            Refresh()
-            Say("button shown.")
+        -- sobre lo elegido, no sobre lo que se ve: en combate puede ir por detras
+        local show = not WantShown()
+        if SetShownByChoice(show) then
+            Say(show and "button shown." or "button hidden. |cffffd100/dis|r brings it back.")
         end
+        RefreshOptions()
 
     elseif cmd == "options" or cmd == "config" then
         ToggleOptions()
@@ -835,9 +926,7 @@ local function HandleSlash(msg)
         Say(db.locked and "button locked." or "button loose: move it with the right button.")
 
     elseif cmd == "reset" then
-        db.point, db.relPoint = DEFAULTS.point, DEFAULTS.relPoint
-        db.x, db.y = DEFAULTS.x, DEFAULTS.y
-        ApplyPosition()
+        ResetPosition()
         Say("button put back.")
 
     elseif cmd == "blues" then
@@ -876,6 +965,7 @@ loader:RegisterEvent("ADDON_LOADED")
 loader:RegisterEvent("PLAYER_LOGIN")
 loader:RegisterEvent("BAG_UPDATE_DELAYED")
 loader:RegisterEvent("PLAYER_REGEN_ENABLED")
+loader:RegisterEvent("SPELLS_CHANGED")
 loader:SetScript("OnEvent", function(self, event, name)
     if event == "ADDON_LOADED" then
         if name ~= ADDON then return end
@@ -892,8 +982,12 @@ loader:SetScript("OnEvent", function(self, event, name)
         Build()
         BuildOptions()
         ApplyPosition()
+        ApplyVisibility()
         Refresh()
         HookTooltips()
+
+        -- con margen: nada mas entrar puede que el libro de hechizos aun no este
+        if C_Timer and C_Timer.After then C_Timer.After(5, NoticeHidden) else NoticeHidden() end
 
         -- que los nombres traducidos de los materiales esten listos al pasar el raton
         if C_Item and C_Item.RequestLoadItemDataByID then
@@ -914,6 +1008,13 @@ loader:SetScript("OnEvent", function(self, event, name)
 
     elseif event == "PLAYER_REGEN_ENABLED" then
         -- al salir de combate, lo que quedo pendiente
-        if pending and db then Refresh() end
+        if not db or not button then return end
+        if positionPending then ApplyPosition() end
+        ApplyVisibility()
+        if pending then Refresh() end
+
+    elseif event == "SPELLS_CHANGED" then
+        -- aprender u olvidar Encantamiento, si el jugador no eligio
+        if db and button and db.hidden == nil then ApplyVisibility() end
     end
 end)
