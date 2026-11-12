@@ -50,8 +50,12 @@ your bags.
   here.
 - **Movable and lockable.** Right-click drag to move, so the left click stays
   free for the thing you actually came for.
-- **Combat-safe.** The game forbids changing a secure button's action mid-fight,
-  so updates are deferred and applied the moment you leave combat.
+- **Only where it makes sense.** On characters without Enchanting the button
+  starts hidden, and it turns up by itself the moment one learns it. Hide or
+  show it yourself and that choice is remembered for that character.
+- **Combat-safe.** The game forbids changing, showing, hiding or moving a secure
+  button mid-fight, so whatever you ask for then is applied the moment you
+  leave combat.
 - **A diagnosis command**, for when something misbehaves and you would rather
   see facts than guess.
 
@@ -76,7 +80,7 @@ screenshot from another player works whatever language you play in.
 
 | Command | What it does |
 | --- | --- |
-| `/dis` | Show or hide the button |
+| `/dis` | Show or hide the button, remembered per character |
 | `/dis options` | Open the options window |
 | `/dis ban` | Ban the item shown — same as the red X |
 | `/dis list` | See what is banned |
@@ -146,7 +150,9 @@ and is regenerated from the client data after each patch with
 
 ## Notes
 
-- You need the Enchanting profession. Obviously.
+- You need the Enchanting profession. Obviously. Characters without it start
+  with the button hidden, though item tooltips still show what things
+  disenchant into; `/dis` brings the button out anyway.
 - If a confirmation box appears when destroying an item, you have to accept it
   yourself. That one is not something an addon is allowed to touch either.
 

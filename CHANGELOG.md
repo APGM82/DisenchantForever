@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.44
+
+- The button also offers the few items meant to be disenchanted for a reward of their own, such as the wax effigies for the enchanting quest at the Tower of Azora. It used to skip them. Their tooltip says they give their own items instead of listing the usual materials.
+- The button remembers being hidden, per character: hiding it with /dis or the options window now lasts through a /reload or a relog.
+- On characters without Enchanting the button starts hidden, and turns up by itself when the character learns it. Hiding or showing it yourself always wins.
+- Showing, hiding or moving the button during combat no longer fails with "Interface action failed because of an AddOn": it happens as soon as combat ends.
+- The button's tooltip pointed to /dis for the options, but /dis hides the button. It now says /dis options.
+
 ## 1.43
 
 - Item tooltips show what disenchanting gives: each material with its chance and how many. The button's tooltip now names the item it is aimed at and shows the same.
